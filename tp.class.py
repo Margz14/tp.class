@@ -281,7 +281,7 @@ else:
 
 #ici le code ne marche pas car python ne trouve pas de chemin vers le fichier 'classe.csv', je n'ai pas su comment résoudre ce problème...
 
-# pour tester
+# pour test
 
 import io
 import contextlib
