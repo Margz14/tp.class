@@ -191,6 +191,9 @@ class Classe:
     def __len__(self):
         return len(self.students)
 
+    def get_student(self, first_name: str, last_name: str):
+        return self.students.get((first_name, last_name))
+
     def __repr__(self):
         return f"Class({self.classname}, Students: {list(self.students.values())})"
 
@@ -205,6 +208,22 @@ try:
     r = repr(classe)
     if "P20" not in r or "Matthieu" not in r:
         raise Exception('OOPS - There is an issue in your __repr__ method.')
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
+
+# pour tester
+
+try:
+    classe = Classe("P20")
+    student = Student("Matthieu", "Mazière")
+    classe.add_student(student)
+    new_student = classe.get_student("Matthieu", "Mazière")
+    assert student is new_student
+    new_student = classe.get_student("Jérôme", "Adnot")
+    assert new_student is None
 except Exception as e:
     print("OOPS - Something's wrong")
     print(f"Error message : {e}")
