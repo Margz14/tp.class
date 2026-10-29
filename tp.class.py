@@ -176,3 +176,37 @@ except Exception as e:
     print(f"Error message : {e}")
 else:
     print('Congrats ! Your implementation works !')
+
+
+# votre code
+
+class Classe:
+    def __init__(self, classname: str):
+        self.classname = classname
+        self.students=defaultdict(list)
+
+    def add_student(self, student: Student):
+        self.students[(student.prenom, student.nom)] = student
+
+    def __len__(self):
+        return len(self.students)
+
+    def __repr__(self):
+        return f"Class({self.classname}, Students: {list(self.students.values())})"
+
+# pour tester
+
+try:
+    classe = Classe("P20")
+    student = Student("Matthieu", "Mazière")
+    classe.add_student(student)
+    if len(classe) != 1:
+        raise Exception('OOPS - There is an issue in your __len__ method.')
+    r = repr(classe)
+    if "P20" not in r or "Matthieu" not in r:
+        raise Exception('OOPS - There is an issue in your __repr__ method.')
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
