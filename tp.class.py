@@ -71,8 +71,19 @@ class Student:
         else : 
             return (sum(self.grades[course])/len(self.grades[course]))
 
+    def report(self):
+        lines=[
+        f"Report for student {self.prenom} {self.nom}",
+        "+===============+===============+",
+        "|     Topic     |    Average    |",
+        "+===============+===============+",]
+        for i in self.followed_topics():
+            lines.append(f"|{i:^15}|{self.compute_average(i):^15.2f}|")
+            lines.append("+---------------+---------------+")
+        return "\n".join(lines)
+
     def __repr__(self):
-        return f" {self.prenom}, {self.nom}, Grades:{self.grades}"
+        return f"{self.prenom} {self.prenom}"
 
 # pour tester
 
@@ -136,3 +147,32 @@ else:
     raise Exception("If topic is not followed, a ValueError is expected")
 print(student.followed_topics())
 
+# pour tester
+
+try:
+    reference_lines = ['Report for student Albert Einstein',
+                       '+===============+===============+',
+                       '|     Topic     |    Average    |',
+                       '+===============+===============+',
+                       '|  Mathematics  |     12.80     |',
+                       '+---------------+---------------+',
+                       '|  Scubadiving  |     12.50     |',
+                       '+---------------+---------------+']
+
+    student = Student("Albert", "Einstein")
+    student.add_grade("Mathematics", 12.80)
+    student.add_grade("Scubadiving", 12.50)
+    report = student.report()
+    report_lines = report.strip().split('\n')
+    assert len(report_lines) == len(reference_lines), \
+        f"expected {len(reference_lines)} lines, got {len(report_lines)}"
+    for i, (lineref, linestudent) in enumerate(zip(reference_lines, report_lines), start=1):
+        assert lineref == linestudent, f"Ligne {i} : \n attendu = {lineref}\n  obtenu = {linestudent}"
+except AssertionError as e:
+    print("Les deux chaines sont différentes")
+    print(e)
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
