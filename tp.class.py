@@ -43,29 +43,7 @@ class Tirelire:
     def __repr__(self):
             return f"Tirelire({len(self)} coins, total={self.total()})"
 
-    
-# pour tester
 
-try:
-    t = Tirelire()
-    t.deposit(0.5)
-    t.deposit(1)
-    assert len(t) == 2
-    assert t.total() == 1.5
-    assert repr(t) == "Tirelire(2 coins, total=1.5)"
-    other = Tirelire()
-    assert len(other) == 0
-    try:
-        other.deposit(-1)
-    except ValueError:
-        pass
-    else:
-        raise Exception("a negative value should raise ValueError")
-except Exception as e:
-    print("OOPS - Something's wrong")
-    print(f"Error message : {e}")
-else:
-    print('Congrats ! Your implementation works !')
 
 #On doit créer la liste de pièces dans l'initialisation pour que deux tirelires soient indépendantes.
 
@@ -77,13 +55,16 @@ class Student:
     def __init__(self, first_name: str, last_name: str):
         self.prenom = first_name
         self.nom = last_name
-        self.grades=[]
+        self.grades=defaultdict(list)  #on créer un dictionnaire qui comprend quand on crée une nouvelle clef
 
     def add_grade(self, course: str, grade: float):
         if grade >20 or grade<0: 
             raise ValueError("...")
         else :
-            self.grades.append(grade)
+            self.grades[course].append(grade) #on ajoute les notes en les associant à la bonne matière
+
+    def followed_topics(self):
+        return self.grades.keys()
 
     def __repr__(self):
         return f" {self.prenom}, {self.nom}, Grades:{self.grades}"
@@ -93,11 +74,13 @@ class Student:
 
 try:
     student = Student("Achille", "Talon")
-    r = repr(student)
-    assert isinstance(r, str), "__repr__ must return a str"
-    assert "Achille" in r and "Talon" in r, f"first and last name should appear in {r!r}"
+    student.add_grade("History", 10.)
+    topics = student.followed_topics()
+    if len(topics) != 1 or "History" not in topics:
+        raise Exception(f"Expecting ['History'] got {topics}")
 except Exception as e:
-    print('OOPS - There is an issue in your code.')
+    print('OOPS - There is an issue in your followed_topics method')
     print(f"Error message : {e}")
 else:
     print('Congrats ! Your implementation works !')
+
