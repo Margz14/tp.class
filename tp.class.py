@@ -42,8 +42,7 @@ class Tirelire:
         return len(self.T)
     def __repr__(self):
             return f"Tirelire({len(self)} coins, total={self.total()})"
-
-
+ 
 
 #On doit créer la liste de pièces dans l'initialisation pour que deux tirelires soient indépendantes.
 
@@ -66,9 +65,45 @@ class Student:
     def followed_topics(self):
         return self.grades.keys()
 
+    def compute_average(self, course: str ): 
+        if course not in self.followed_topics():
+            raise ValueError("...")
+        else : 
+            return (sum(self.grades[course])/len(self.grades[course]))
+
     def __repr__(self):
         return f" {self.prenom}, {self.nom}, Grades:{self.grades}"
 
+# pour tester
+
+try:
+    student = Student("Achille", "Talon")
+    r = repr(student)
+    assert isinstance(r, str), "__repr__ must return a str"
+    assert "Achille" in r and "Talon" in r, f"first and last name should appear in {r!r}"
+except Exception as e:
+    print('OOPS - There is an issue in your code.')
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
+
+# pour tester
+
+try:
+    student = Student("Achille", "Talon")
+    student.add_grade("History", 10.)
+    student.add_grade("History", 12.)
+    try:
+        student.add_grade("History", 25.)
+    except ValueError:
+        pass
+    else:
+        raise Exception("a grade outside of [0, 20] should raise ValueError")
+except Exception as e:
+    print('OOPS - There is an issue in your add_grade method.')
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
 
 # pour tester
 
@@ -83,4 +118,21 @@ except Exception as e:
     print(f"Error message : {e}")
 else:
     print('Congrats ! Your implementation works !')
+
+
+# pour tester
+
+
+student = Student("Achille", "Talon")
+student.add_grade("History", 10.)
+student.add_grade("History", 12.)
+if (student.compute_average("History") != 11.):
+    raise Exception("Issue in your average calculation.")
+try:
+     student.compute_average("French")
+except ValueError:
+    pass
+else:
+    raise Exception("If topic is not followed, a ValueError is expected")
+print(student.followed_topics())
 
