@@ -68,3 +68,36 @@ else:
     print('Congrats ! Your implementation works !')
 
 #On doit créer la liste de pièces dans l'initialisation pour que deux tirelires soient indépendantes.
+
+# votre code
+
+from collections import defaultdict
+
+class Student:
+    def __init__(self, first_name: str, last_name: str):
+        self.prenom = first_name
+        self.nom = last_name
+        self.grades=[]
+
+    def add_grade(self, course: str, grade: float):
+        if grade >20 or grade<0: 
+            raise ValueError("...")
+        else :
+            self.grades.append(grade)
+
+    def __repr__(self):
+        return f" {self.prenom}, {self.nom}, Grades:{self.grades}"
+
+
+# pour tester
+
+try:
+    student = Student("Achille", "Talon")
+    r = repr(student)
+    assert isinstance(r, str), "__repr__ must return a str"
+    assert "Achille" in r and "Talon" in r, f"first and last name should appear in {r!r}"
+except Exception as e:
+    print('OOPS - There is an issue in your code.')
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
