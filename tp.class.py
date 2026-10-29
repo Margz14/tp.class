@@ -194,10 +194,45 @@ class Classe:
     def get_student(self, first_name: str, last_name: str):
         return self.students.get((first_name, last_name))
 
+    def load_students_from_file(self, filename: str):
+        with open(filename, 'r', encoding='utf-8') as file:
+            for line in file:
+                line = line.strip()
+                if line:
+                    first_name, last_name = line.split(',')
+                    student = Student(first_name.strip(), last_name.strip())
+                    self.add_student(student)
+
+    def load_grades_from_file(self, filename: str):
+        with open(filename, 'r', encoding='utf-8') as file:
+            list(map(float, parts[3:]))
+            for line in file:
+                data = line.strip().split(',')
+                if not data or len(data) < 4:
+                    continue
+                first_name = data[0].strip()
+                last_name = data[1].strip()
+                course = data[2].strip()
+                grades = data[3:]
+                student = self.get_student(first_name, last_name)
+                if student is None:
+                    print(f"Attention , élève inconnu : {first_name} {last_name}")
+                    continue
+                for grade in grades:
+                    student.add_grade(course, grade)
+
+    def catalog(self):
+        catalog=defaultdict(list)
+        for student in self.students.values() :
+            for matiere in Student.followed_topics():
+                catalog[matiere] = catalog.get(matiere, 0) + 1
+        return catalog
+
+    def compute_averages():
+
     def __repr__(self):
         return f"Class({self.classname}, Students: {list(self.students.values())})"
 
-# pour tester
 
 try:
     classe = Classe("P20")
@@ -229,3 +264,57 @@ except Exception as e:
     print(f"Error message : {e}")
 else:
     print('Congrats ! Your implementation works !')
+
+# pour tester
+
+try:
+    classe = Classe("P1920")
+    classe.load_students_from_file('classe.csv')
+    if len(classe) != 3:
+        raise Exception('OOPS - There is an issue in your load_students_from_file method')
+    assert classe.get_student("Enrico", "Fermi") is not None
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works ! ')
+
+#ici le code ne marche pas car python ne trouve pas de chemin vers le fichier 'classe.csv', je n'ai pas su comment résoudre ce problème...
+
+# pour tester
+
+import io
+import contextlib
+
+try:
+    classe = Classe("P1920")
+    classe.load_students_from_file('classe.csv')
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        classe.load_grades_from_file('grades.csv')
+    assert "Personne" in buffer.getvalue(), "no warning printed for the unknown student"
+    assert classe.get_student("Albert", "Einstein").compute_average("Physics") == 15.
+    assert classe.get_student("Albert", "Einstein").compute_average("Mathematics") == 13.
+    assert classe.get_student("Enrico", "Fermi").compute_average("Scubadiving") == 9.5
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works ! ')
+#le test ne fonctionne pas, il y a un problème de décalage entre le nombre d'élèves attendu par la méthode et le nombre d'élèves du fichier, mais après de nombreux essais je n'arrive pas à le résoudre !
+
+# pour tester
+
+try:
+    classe = Classe("P1920")
+    classe.load_students_from_file('classe.csv')
+    classe.load_grades_from_file('grades.csv')
+    true_catalog = {'Physics': 3, 'Mathematics': 2, 'Scubadiving': 1}
+    assert classe.catalog() == true_catalog, f"got {classe.catalog()}"
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works ! ')
+
+#là encore , python me renvoie un message d'erreur à cause du terme "parts" dans la fonction permettant de convertire les notes en flottants, ce terme est non reconnu. 
