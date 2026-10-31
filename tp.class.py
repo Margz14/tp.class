@@ -228,7 +228,14 @@ class Classe:
                 catalog[matiere] = catalog.get(matiere, 0) + 1
         return catalog
 
-    def compute_averages():
+    def compute_averages(self):
+        totaltopics=defaultdict(list)
+        for student in self.students.values():
+            for matiere in Student.followed_topics():
+                totaltopics[matiere]+=Student.compute_average(matiere)
+        for top in totaltopics():
+            totaltopics[top]=totaltopics[top]/self.catalog[top]
+        return totaltopics 
 
     def __repr__(self):
         return f"Class({self.classname}, Students: {list(self.students.values())})"
@@ -318,3 +325,17 @@ else:
     print('Congrats ! Your implementation works ! ')
 
 #là encore , python me renvoie un message d'erreur à cause du terme "parts" dans la fonction permettant de convertire les notes en flottants, ce terme est non reconnu. 
+
+# pour tester
+
+try:
+    classe = Classe("P1920")
+    classe.load_students_from_file('classe.csv')
+    classe.load_grades_from_file('grades.csv')
+    true_catalog = {'Physics': 3, 'Mathematics': 2, 'Scubadiving': 1}
+    assert classe.catalog() == true_catalog, f"got {classe.catalog()}"
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works ! ')
