@@ -256,7 +256,7 @@ except Exception as e:
 else:
     print('Congrats ! Your implementation works !')
 
-# pour tester
+# pour test
 
 try:
     classe = Classe("P20")
